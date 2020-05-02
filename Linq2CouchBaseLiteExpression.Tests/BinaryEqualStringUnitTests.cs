@@ -6,6 +6,12 @@ namespace Linq2CouchBaseLiteExpression.Tests
     [TestClass]
     public class BinaryEqualStringUnitTests
     {
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            Couchbase.Lite.Support.NetDesktop.Activate();
+        }
+
         [TestMethod]
         public void Binary_Equal_ValueConstants()
         {
