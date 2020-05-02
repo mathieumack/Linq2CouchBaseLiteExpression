@@ -1,0 +1,20 @@
+<Project>
+  <PropertyGroup>
+    <Copyright>Copyright (c) MACK Mathieu</Copyright>
+    <Product>$(AssemblyName) ($(TargetFramework))</Product>
+    <NeutralLanguage>en</NeutralLanguage>
+    
+    <LangVersion>latest</LangVersion>
+    <NoWarn>$(NoWarn);1591;1701;1702;1705;VSX1000;NU1603</NoWarn>
+    <GenerateDocumentationFile Condition=" '$(Configuration)' == 'Release' ">true</GenerateDocumentationFile>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' and '$(IsTestProject)' != 'true'">true</GeneratePackageOnBuild>
+    
+    <Platform>AnyCPU</Platform>
+    <DebugType>portable</DebugType>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    
+    <IsTestProject>$(MSBuildProjectName.Contains('UnitTest'))</IsTestProject>
+    <IsLibraryProject>$(MSBuildProjectName.Contains('MvvX.Plugins.ServiceMaxMobile'))</IsLibraryProject>
+  </PropertyGroup>  
+</Project>
