@@ -1,10 +1,14 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
+    <ProjectGuid>{49A4AC1F-5E11-57A4-8436-9FBA3C5D87DE}</ProjectGuid>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>Linq2CouchBaseLiteExpression</PackageProjectUrl>
+    <AssemblyName>Linq2CouchBaseLiteExpression</AssemblyName>
+    <RootNamespace>Linq2CouchBaseLiteExpression</RootNamespace>
+    <PackageId>Linq2CouchBaseLiteExpression</PackageId>
     <RepositoryUrl>Linq2CouchBaseLiteExpression</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Product />
