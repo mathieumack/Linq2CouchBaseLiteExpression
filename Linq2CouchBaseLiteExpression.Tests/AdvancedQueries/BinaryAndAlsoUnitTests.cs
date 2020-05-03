@@ -1,7 +1,7 @@
 using Linq2CouchBaseLiteExpression.Tests.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Linq2CouchBaseLiteExpression.Tests
+namespace Linq2CouchBaseLiteExpression.Tests.AdvancedQueries
 {
     [TestClass]
     public class BinaryAndAlsoUnitTests : BaseUnitTest

@@ -1,10 +1,10 @@
 using Linq2CouchBaseLiteExpression.Tests.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Linq2CouchBaseLiteExpression.Tests.AdvancedQueries
+namespace Linq2CouchBaseLiteExpression.Tests.SystemFunctions
 {
     [TestClass]
-    public class BinaryOrElseUnitTests : BaseUnitTest
+    public class EqualsUnitTests : BaseUnitTest
     {
         [TestInitialize]
         public override void TestInitialize()
@@ -19,17 +19,16 @@ namespace Linq2CouchBaseLiteExpression.Tests.AdvancedQueries
         }
 
         [TestMethod]
-        public void Binary_Not_Expression_Exists()
+        public void Equals_WithConstants_Exists()
         {
-            var nameValue = "name2";
-            CheckCount<EntityObject>((e) => e.Name == nameValue || e.IsHuman == true, 3);
+            CheckCount<EntityObject>((e) => e.Name.Equals("name2"), 1);
         }
 
         [TestMethod]
-        public void Binary_Not_Expression_Void()
+        public void Equals_WithVariable_Exists()
         {
             var nameValue = "name2";
-            CheckCount<EntityObject>((e) => e.Name == nameValue || e.IsHuman == false, 3);
+            CheckCount<EntityObject>((e) => e.Name.Equals(nameValue), 1);
         }
     }
 }

@@ -96,6 +96,12 @@ namespace Linq2CouchBaseLiteExpression
         /// <returns></returns>
         private static Couchbase.Lite.Query.IExpression GenerateFromExpression(MethodCallExpression expression)
         {
+            if(expression.Method.Name.Equals("Equals"))
+            {
+                return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Object, null).ToString())
+                                   .EqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Arguments[0], null)));
+            }
+
             throw new NotSupportedException("expression of type type (" + expression.NodeType.ToString() + ") are not supported.");
         }
 
