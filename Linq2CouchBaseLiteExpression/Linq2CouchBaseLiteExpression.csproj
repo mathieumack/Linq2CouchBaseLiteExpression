@@ -12,7 +12,7 @@
     <RepositoryUrl>Linq2CouchBaseLiteExpression</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Product />
-    <Description>This package let you create linq queries to querying a couchbase lite database</Description>
+    <Description>This package let you create linq queries to querying a couchbase lite database</Description> 
   </PropertyGroup>
 
   <ItemGroup>
