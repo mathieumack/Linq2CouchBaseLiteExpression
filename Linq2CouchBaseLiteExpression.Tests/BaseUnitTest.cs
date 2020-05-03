@@ -19,17 +19,20 @@ namespace Linq2CouchBaseLiteExpression.Tests
         {
             Couchbase.Lite.Support.NetDesktop.Activate();
 
-            db = new Database("unittests");
+            db = new Database(Guid.NewGuid().ToString());
 
-            if(db.Count == 0)
-            {
-                // Empty database, so we will create 6 sample documents :
-                CreateDocument("name1", true, DateTimeOffset.UtcNow);
-                CreateDocument("name2", true, DateTimeOffset.UtcNow.AddDays(-1));
-                CreateDocument("name3", true, DateTimeOffset.UtcNow);
-                CreateDocument("name4", false, DateTimeOffset.UtcNow.AddDays(-1));
-                CreateDocument("name5", false, DateTimeOffset.UtcNow);
-            }
+            // Empty database, so we will create 6 sample documents :
+            CreateDocument("name1", true, DateTimeOffset.UtcNow);
+            CreateDocument("name2", true, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name3", true, DateTimeOffset.UtcNow);
+            CreateDocument("name4", false, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name5", false, DateTimeOffset.UtcNow);
+        }
+
+        public virtual void CloseConnection()
+        {
+            db.Delete();
+            db.Dispose();
         }
 
         /// <summary>

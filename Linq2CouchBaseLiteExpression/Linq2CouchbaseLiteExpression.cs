@@ -26,11 +26,18 @@ namespace Linq2CouchBaseLiteExpression
         {
             if (expression is BinaryExpression)
                 return GenerateFromExpression(expression as BinaryExpression);
-            if (expression is MethodCallExpression)
+            else if (expression is MethodCallExpression)
                 return GenerateFromExpression(expression as MethodCallExpression);
-            if (expression is UnaryExpression)
+            else if (expression is UnaryExpression)
                 return GenerateFromExpression(expression as UnaryExpression);
-            return null;
+            else if (expression is MemberExpression)
+            {
+                var memberValue = GetValueFromExpression(expression, null);
+                return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
+                            .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
+            }
+            
+            throw new NotSupportedException("expression of type (" + expression.GetType().ToString() + ") are not supported.");
         }
 
         /// <summary>
@@ -43,20 +50,11 @@ namespace Linq2CouchBaseLiteExpression
         {
             switch (expression.NodeType)
             {
-                //case ExpressionType.Equal:
-                //    // Left must be the member
-                //    // Right must be the value
-                //    return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression., null).ToString())
-                //                .EqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Right, null)));
                 case ExpressionType.Not:
                     return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Operand, null).ToString())
-                                .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
-                //case ExpressionType.AndAlso:
-                //    var leftExpression = GenerateFromExpression(expression.Left);
-                //    var rightExpression = GenerateFromExpression(expression.Right);
-                //    return leftExpression.And(rightExpression);
+                                .EqualTo(Couchbase.Lite.Query.Expression.Boolean(false));
                 default:
-                    return null;
+                    throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
             }
         }
 
@@ -83,7 +81,7 @@ namespace Linq2CouchBaseLiteExpression
                     var rightExpression = GenerateFromExpression(expression.Right);
                     return leftExpression.And(rightExpression);
                 default:
-                    return null;
+                    throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
             }
         }
 
@@ -94,13 +92,7 @@ namespace Linq2CouchBaseLiteExpression
         /// <returns></returns>
         private static Couchbase.Lite.Query.IExpression GenerateFromExpression(MethodCallExpression expression)
         {
-            switch (expression.NodeType)
-            {
-                case ExpressionType.Equal:
-                    return null;
-                default:
-                    return null;
-            }
+            throw new NotSupportedException("expression of type type (" + expression.NodeType.ToString() + ") are not supported.");
         }
 
         #endregion
@@ -125,7 +117,8 @@ namespace Linq2CouchBaseLiteExpression
                     return constExpression.Value;
                 return t.InvokeMember(memberName, BindingFlags.GetField, null, constExpression.Value, null);
             }
-            return null;
+
+            throw new NotSupportedException("expression of type type (" + expression.NodeType.ToString() + ") are not supported.");
         }
 
         #endregion

@@ -14,6 +14,18 @@ namespace Linq2CouchBaseLiteExpression.Tests
             base.TestInitialize();
         }
 
+        [TestCleanup]
+        public override void CloseConnection()
+        {
+            base.CloseConnection();
+        }
+
+        [TestMethod]
+        public void Binary_Is_Expression()
+        {
+            CheckCount<EntityObject>((e) => (e.IsHuman), 3);
+        }
+
         [TestMethod]
         public void Binary_Not_Expression()
         {

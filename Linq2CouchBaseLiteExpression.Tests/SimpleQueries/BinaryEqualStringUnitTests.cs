@@ -12,6 +12,12 @@ namespace Linq2CouchBaseLiteExpression.Tests
             base.TestInitialize();
         }
 
+        [TestCleanup]
+        public override void CloseConnection()
+        {
+            base.CloseConnection();
+        }
+
         [TestMethod]
         public void Binary_Equal_ValueConstants_Void()
         {
