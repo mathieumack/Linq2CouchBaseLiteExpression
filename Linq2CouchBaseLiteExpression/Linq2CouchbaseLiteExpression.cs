@@ -77,9 +77,13 @@ namespace Linq2CouchBaseLiteExpression
                     return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Left, null).ToString())
                                 .NotEqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Right, null)));
                 case ExpressionType.AndAlso:
-                    var leftExpression = GenerateFromExpression(expression.Left);
-                    var rightExpression = GenerateFromExpression(expression.Right);
-                    return leftExpression.And(rightExpression);
+                    var leftExpressionAnd = GenerateFromExpression(expression.Left);
+                    var rightExpressionAnd = GenerateFromExpression(expression.Right);
+                    return leftExpressionAnd.And(rightExpressionAnd);
+                case ExpressionType.OrElse:
+                    var leftExpressionOr = GenerateFromExpression(expression.Left);
+                    var rightExpressionOr = GenerateFromExpression(expression.Right);
+                    return leftExpressionOr.Or(rightExpressionOr);
                 default:
                     throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
             }
