@@ -22,7 +22,7 @@ namespace Linq2CouchBaseLiteExpression
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        private static Couchbase.Lite.Query.IExpression GenerateFromExpression(Expression expression)
+        private static Couchbase.Lite.Query.IExpression GenerateFromExpression(Expression expression) 
         {
             if (expression is BinaryExpression)
                 return GenerateFromExpression(expression as BinaryExpression);
