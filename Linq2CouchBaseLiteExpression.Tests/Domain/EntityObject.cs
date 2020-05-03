@@ -32,7 +32,7 @@ namespace Linq2CouchBaseLiteExpression.Tests.Domain
         
         public double PoidsDouble { get; set; }
         
-        public bool IsAMan { get; set; }
+        public bool IsHuman { get; set; }
         
         public int NumberOfChildenInt { get; set; }
 

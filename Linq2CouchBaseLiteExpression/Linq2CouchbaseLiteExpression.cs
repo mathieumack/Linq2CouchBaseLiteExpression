@@ -28,7 +28,36 @@ namespace Linq2CouchBaseLiteExpression
                 return GenerateFromExpression(expression as BinaryExpression);
             if (expression is MethodCallExpression)
                 return GenerateFromExpression(expression as MethodCallExpression);
+            if (expression is UnaryExpression)
+                return GenerateFromExpression(expression as UnaryExpression);
             return null;
+        }
+
+        /// <summary>
+        /// Transform an <see cref="BinaryExpression"/>.
+        /// Here we manage expression type : <see cref="ExpressionType.Equal"/>, <see cref="ExpressionType.Not"/> or <see cref="ExpressionType.AndAlso"/>
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        private static Couchbase.Lite.Query.IExpression GenerateFromExpression(UnaryExpression expression)
+        {
+            switch (expression.NodeType)
+            {
+                //case ExpressionType.Equal:
+                //    // Left must be the member
+                //    // Right must be the value
+                //    return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression., null).ToString())
+                //                .EqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Right, null)));
+                case ExpressionType.Not:
+                    return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Operand, null).ToString())
+                                .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
+                //case ExpressionType.AndAlso:
+                //    var leftExpression = GenerateFromExpression(expression.Left);
+                //    var rightExpression = GenerateFromExpression(expression.Right);
+                //    return leftExpression.And(rightExpression);
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
@@ -92,7 +121,7 @@ namespace Linq2CouchBaseLiteExpression
             {
                 var constExpression = (expression as ConstantExpression);
                 Type t = constExpression.Value.GetType();
-                if (t.Equals(typeof(bool)) || t.Equals(typeof(int)))
+                if (t.Equals(typeof(bool)) || t.Equals(typeof(int)) || t.Equals(typeof(string)))
                     return constExpression.Value;
                 return t.InvokeMember(memberName, BindingFlags.GetField, null, constExpression.Value, null);
             }
