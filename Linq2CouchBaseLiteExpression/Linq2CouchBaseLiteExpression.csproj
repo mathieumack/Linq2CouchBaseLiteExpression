@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>Linq2CouchBaseLiteExpression</PackageProjectUrl>
+    <RepositoryUrl>Linq2CouchBaseLiteExpression</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Product />
+    <Description>This package let you create linq queries to querying a couchbase lite database</Description>
   </PropertyGroup>
 
   <ItemGroup>
