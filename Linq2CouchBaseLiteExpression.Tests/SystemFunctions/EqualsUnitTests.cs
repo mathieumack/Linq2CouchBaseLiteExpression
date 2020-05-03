@@ -19,13 +19,19 @@ namespace Linq2CouchBaseLiteExpression.Tests.SystemFunctions
         }
 
         [TestMethod]
-        public void Equals_WithConstants_Exists()
+        public void Equals_Boolen_WithConstants_Exists()
+        {
+            CheckCount<EntityObject>((e) => e.IsHuman.Equals(true), 3);
+        }
+
+        [TestMethod]
+        public void Equals_String_WithConstants_Exists()
         {
             CheckCount<EntityObject>((e) => e.Name.Equals("name2"), 1);
         }
 
         [TestMethod]
-        public void Equals_WithVariable_Exists()
+        public void Equals_String_WithVariable_Exists()
         {
             var nameValue = "name2";
             CheckCount<EntityObject>((e) => e.Name.Equals(nameValue), 1);
