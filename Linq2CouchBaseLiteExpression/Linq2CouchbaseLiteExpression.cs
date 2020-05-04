@@ -72,12 +72,15 @@ namespace Linq2CouchBaseLiteExpression
             switch (expression.NodeType)
             {
                 case ExpressionType.Equal:
-                    // Left must be the member
-                    // Right must be the value
                     var leftExpressionEqual = GetValueFromExpression(expression.Left, null);
                     var rightExpressionEqual = GetValueFromExpression(expression.Right, null);
                     return Couchbase.Lite.Query.Expression.Property(leftExpressionEqual.ToString())
                                 .EqualTo(Couchbase.Lite.Query.Expression.Value(rightExpressionEqual));
+                case ExpressionType.NotEqual:
+                    var leftExpressionNotEqual = GetValueFromExpression(expression.Left, null);
+                    var rightExpressionNotEqual = GetValueFromExpression(expression.Right, null);
+                    return Couchbase.Lite.Query.Expression.Property(leftExpressionNotEqual.ToString())
+                                .NotEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpressionNotEqual));
                 case ExpressionType.Not:
                     return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Left, null).ToString())
                                 .NotEqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Right, null)));
