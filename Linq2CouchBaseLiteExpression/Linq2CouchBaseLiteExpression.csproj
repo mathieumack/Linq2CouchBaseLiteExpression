@@ -9,12 +9,12 @@
     <AssemblyName>Linq2CouchBaseLiteExpression</AssemblyName>
     <RootNamespace>Linq2CouchBaseLiteExpression</RootNamespace>
     <PackageId>Linq2CouchBaseLiteExpression</PackageId>
-    <PackageLicenseUrl>https://github.com/mathieumack/Linq2CouchBaseLiteExpression/blob/master/LICENSE</PackageLicenseUrl>
     <RepositoryUrl>Linq2CouchBaseLiteExpression</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Product />
     <Description>This package let you create linq queries to querying a couchbase lite database</Description>
-    <Authors>MACK Mathieu</Authors> 
+    <Authors>MACK Mathieu</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression> 
   </PropertyGroup>
 
   <ItemGroup>
