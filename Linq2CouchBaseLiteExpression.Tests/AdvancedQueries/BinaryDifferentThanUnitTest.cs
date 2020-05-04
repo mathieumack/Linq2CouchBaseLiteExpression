@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Linq2CouchBaseLiteExpression.Tests.SimpleQueries
 {
     [TestClass]
-    public class BinaryEqualStringUnitTests : BaseUnitTest
+    public class BinaryNotEqualUnitTest : BaseUnitTest
     {
         [TestInitialize]
         public override void TestInitialize()
@@ -19,23 +19,27 @@ namespace Linq2CouchBaseLiteExpression.Tests.SimpleQueries
         }
 
         [TestMethod]
-        public void Binary_Equal_ValueConstants_Void()
+        public void Binary_NotEqual_ValueConstants_Void()
         {
-            CheckCount<EntityObject>((e) => e.Name == "test", 0);
+            CheckCount<EntityObject>((e) => e.Age != 8, 3);
         }
 
         [TestMethod]
-        public void Binary_Equal_ValueConstants_Exists()
+        public void Binary_NotEqual_ValueWithVariable_Void()
         {
-            CheckCount<EntityObject>((e) => e.Name == "name4", 1);
+            int minAge = 8;
+            CheckCount<EntityObject>((e) => e.Age != minAge, 3);
         }
 
         [TestMethod]
-        public void Binary_Equal_ValueByVariable()
+        public void Binary_NotEqual_ValueWithStaticFunction_Void()
         {
-            var nameValue = "name3";
-            CheckCount<EntityObject>((e) => e.Name == nameValue, 1);
+            CheckCount<EntityObject>((e) => e.Age != GetStaticAge(), 3);
+        }
 
+        public static int GetStaticAge()
+        {
+            return 8;
         }
     }
 }

@@ -25,17 +25,11 @@ namespace Linq2CouchBaseLiteExpression.Tests.Domain
         public bool Deleted { get; set; }
 
         public string Name { get; set; }
-        
-        public DateTimeOffset Birthday { get; set; }
-        
-        public float PoidsFloat { get; set; }
-        
-        public double PoidsDouble { get; set; }
-        
-        public bool IsHuman { get; set; }
-        
-        public int NumberOfChildenInt { get; set; }
 
-        public long NumberOfChildenLong { get; set; }
+        public int Age { get; set; }
+
+        public string SurName { get; set; }
+
+        public bool IsHuman { get; set; }
     }
 }
