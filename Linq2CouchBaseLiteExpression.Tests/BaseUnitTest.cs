@@ -22,11 +22,11 @@ namespace Linq2CouchBaseLiteExpression.Tests
             db = new Database(Guid.NewGuid().ToString());
 
             // Empty database, so we will create 6 sample documents :
-            CreateDocument("name1", true, DateTimeOffset.UtcNow);
-            CreateDocument("name2", true, DateTimeOffset.UtcNow.AddDays(-1));
-            CreateDocument("name3", true, DateTimeOffset.UtcNow);
-            CreateDocument("name4", false, DateTimeOffset.UtcNow.AddDays(-1));
-            CreateDocument("name5", false, DateTimeOffset.UtcNow);
+            CreateDocument("name1", "firstName1", 8, true, DateTimeOffset.UtcNow);
+            CreateDocument("name2", "", 8, true, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name3", "firstName3", 12, true, DateTimeOffset.UtcNow);
+            CreateDocument("name4", "", 9, false, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name5", "firstName5", 7, false, DateTimeOffset.UtcNow);
         }
 
         public virtual void CloseConnection()
@@ -39,13 +39,17 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// Create a new document in the local storage
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="surName"></param>
+        /// <param name="age"></param>
         /// <param name="isHuman"></param>
         /// <param name="createdAt"></param>
-        private void CreateDocument(string name, bool isHuman, DateTimeOffset createdAt)
+        private void CreateDocument(string name, string surName, int age, bool isHuman, DateTimeOffset createdAt)
         {
             using (var newDocument = new MutableDocument())
             {
                 newDocument.SetString("Name", name)
+                            .SetString("SurName", surName)
+                            .SetInt("Age", age)
                             .SetBoolean("IsHuman", isHuman)
                             .SetDate("CreatedAt", createdAt);
 
