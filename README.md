@@ -70,8 +70,8 @@ You can also combine conditions :
 
 Function | Example
 --- | ---
-\|\| | <pre lang=csharp> (e) => e.Name == "test" || e.Name == "test 2"</pre>
-\&\& | <pre lang=csharp> (e) => e.Value > 10 && e.Name == "test 2"</pre>
+\|\| | <pre lang=csharp> (e) => e.Name == "test" \|\| e.Name == "test 2"</pre>
+\&\& | <pre lang=csharp> (e) => e.Value > 10 \&\& e.Name == "test 2"</pre>
 </pre>
 
 ## Lambda expression writing
