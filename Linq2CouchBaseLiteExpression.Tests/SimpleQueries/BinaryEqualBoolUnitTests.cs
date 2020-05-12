@@ -30,5 +30,18 @@ namespace Linq2CouchBaseLiteExpression.Tests.SimpleQueries
             var nameValue = true;
             CheckCount<EntityObject>((e) => e.IsHuman == nameValue, 3);
         }
+
+        [TestMethod]
+        public void Binary_Boolean_ValueConstants_Invert()
+        {
+            CheckCount<EntityObject>((e) => true == e.IsHuman, 3);
+        }
+
+        [TestMethod]
+        public void Binary_Boolean_ValueByVariable_Invert()
+        {
+            var nameValue = true;
+            CheckCount<EntityObject>((e) => nameValue == e.IsHuman, 3);
+        }
     }
 }
