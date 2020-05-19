@@ -68,52 +68,99 @@ namespace Linq2CouchBaseLiteExpression
         /// <returns></returns>
         private static Couchbase.Lite.Query.IExpression GenerateFromExpression(BinaryExpression expression)
         {
-            switch (expression.NodeType)
+            if(IsCompareFieldNodeType(expression.NodeType))
             {
-                case ExpressionType.Equal:
-                    var leftExpressionEqual = GetValueFromExpression(expression.Left, null);
-                    var rightExpressionEqual = GetValueFromExpression(expression.Right, null);
-                    return Couchbase.Lite.Query.Expression.Property(leftExpressionEqual.ToString())
-                                .EqualTo(Couchbase.Lite.Query.Expression.Value(rightExpressionEqual));
-                case ExpressionType.NotEqual:
-                    var leftExpressionNotEqual = GetValueFromExpression(expression.Left, null);
-                    var rightExpressionNotEqual = GetValueFromExpression(expression.Right, null);
-                    return Couchbase.Lite.Query.Expression.Property(leftExpressionNotEqual.ToString())
-                                .NotEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpressionNotEqual));
-                case ExpressionType.Not:
-                    return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Left, null).ToString())
-                                .NotEqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Right, null)));
-                case ExpressionType.AndAlso:
-                    var leftExpressionAnd = GenerateFromExpression(expression.Left);
-                    var rightExpressionAnd = GenerateFromExpression(expression.Right);
-                    return leftExpressionAnd.And(rightExpressionAnd);
-                case ExpressionType.OrElse:
-                    var leftExpressionOr = GenerateFromExpression(expression.Left);
-                    var rightExpressionOr = GenerateFromExpression(expression.Right);
-                    return leftExpressionOr.Or(rightExpressionOr);
-                case ExpressionType.GreaterThan:
-                    var leftExpressionGreaterThan = GetValueFromExpression(expression.Left, null);
-                    var rightExpressionGreaterThan = GetValueFromExpression(expression.Right, null);
-                    return Couchbase.Lite.Query.Expression.Property(leftExpressionGreaterThan.ToString())
-                                .GreaterThan(Couchbase.Lite.Query.Expression.Value(rightExpressionGreaterThan));
-                case ExpressionType.GreaterThanOrEqual:
-                    var leftExpressionGreaterThanOrEqual = GetValueFromExpression(expression.Left, null);
-                    var rightExpressionGreaterThanOrEqual = GetValueFromExpression(expression.Right, null);
-                    return Couchbase.Lite.Query.Expression.Property(leftExpressionGreaterThanOrEqual.ToString())
-                                .GreaterThanOrEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpressionGreaterThanOrEqual));
-                case ExpressionType.LessThan:
-                    var leftExpressionLessThan = GetValueFromExpression(expression.Left, null);
-                    var rightExpressionLessThan = GetValueFromExpression(expression.Right, null);
-                    return Couchbase.Lite.Query.Expression.Property(leftExpressionLessThan.ToString())
-                                .LessThan(Couchbase.Lite.Query.Expression.Value(rightExpressionLessThan));
-                case ExpressionType.LessThanOrEqual:
-                    var leftExpressionLessThanOrEqual = GetValueFromExpression(expression.Left, null);
-                    var rightExpressionLessThanOrEqual = GetValueFromExpression(expression.Right, null);
-                    return Couchbase.Lite.Query.Expression.Property(leftExpressionLessThanOrEqual.ToString())
-                                .LessThanOrEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpressionLessThanOrEqual));
-                default:
-                    throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
+                var leftExpression = GetValueFromExpression(expression.Left, null);
+                var rightExpression = GetValueFromExpression(expression.Right, null);
+                bool isFieldAtLeft = IsFieldExpression(expression.Left);
+
+                if (!isFieldAtLeft)
+                {
+                    // We invert expressions :
+                    var temp = leftExpression;
+                    leftExpression = rightExpression;
+                    rightExpression = temp;
+                }
+
+                switch (expression.NodeType)
+                {
+                    case ExpressionType.Equal:
+                        return Couchbase.Lite.Query.Expression.Property(leftExpression.ToString())
+                                .EqualTo(Couchbase.Lite.Query.Expression.Value(rightExpression));
+                    case ExpressionType.NotEqual:
+                    case ExpressionType.Not:
+                        return Couchbase.Lite.Query.Expression.Property(leftExpression.ToString())
+                                .NotEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpression));
+                    case ExpressionType.GreaterThan:
+                        return Couchbase.Lite.Query.Expression.Property(leftExpression.ToString())
+                                .GreaterThan(Couchbase.Lite.Query.Expression.Value(rightExpression));
+                    case ExpressionType.GreaterThanOrEqual:
+                        return Couchbase.Lite.Query.Expression.Property(leftExpression.ToString())
+                                .GreaterThanOrEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpression));
+                    case ExpressionType.LessThan:
+                        return Couchbase.Lite.Query.Expression.Property(leftExpression.ToString())
+                                .LessThan(Couchbase.Lite.Query.Expression.Value(rightExpression));
+                    case ExpressionType.LessThanOrEqual:
+                        return Couchbase.Lite.Query.Expression.Property(leftExpression.ToString())
+                                .LessThanOrEqualTo(Couchbase.Lite.Query.Expression.Value(rightExpression));
+                    default:
+                        throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
+                }
             }
+            else
+            {
+                var leftExpression = GenerateFromExpression(expression.Left);
+                var rightExpression = GenerateFromExpression(expression.Right);
+                bool isFieldAtLeft = IsFieldExpression(expression.Left);
+
+                if (!isFieldAtLeft)
+                {
+                    // We invert expressions :
+                    var temp = leftExpression;
+                    leftExpression = rightExpression;
+                    rightExpression = temp;
+                }
+
+                switch (expression.NodeType)
+                {
+                    case ExpressionType.AndAlso:
+                        return leftExpression.And(rightExpression);
+                    case ExpressionType.OrElse:
+                        return leftExpression.Or(rightExpression);
+                    default:
+                        throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
+                }
+            }
+        }
+
+        private static bool IsCompareFieldNodeType(ExpressionType expressionType)
+        {
+            return expressionType == ExpressionType.Equal ||
+                expressionType == ExpressionType.NotEqual ||
+                expressionType == ExpressionType.Not ||
+                expressionType == ExpressionType.GreaterThan ||
+                expressionType == ExpressionType.GreaterThanOrEqual ||
+                expressionType == ExpressionType.LessThan ||
+                expressionType == ExpressionType.LessThanOrEqual;
+        }
+
+        /// <summary>
+        /// Check if an expression corresponds to an member field
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        private static bool IsFieldExpression(Expression expression)
+        {
+            if (expression is MemberExpression)
+            {
+                var exp = expression as MemberExpression;
+                if (exp.Expression is ParameterExpression)
+                    return true;
+                else
+                    return IsFieldExpression(exp.Expression);
+            }
+
+            return false;
         }
 
         /// <summary>

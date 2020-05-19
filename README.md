@@ -77,13 +77,13 @@ Function | Example
 ## Lambda expression writing
 
 The expression must respect some specific rules :
-* The Field name must be always at left :
+* You can set field object at left or at right of the operation :
 ```csharp
 
 // Valid :
 Linq2CouchbaseLiteExpression.GenerateFromExpression<EntityObject>((e) => e.Name == "test");
 
-// Invalid :
+// Or :
 Linq2CouchbaseLiteExpression.GenerateFromExpression<EntityObject>((e) => "test" = e.Name );
 
 ```
