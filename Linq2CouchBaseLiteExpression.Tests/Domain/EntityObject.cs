@@ -26,6 +26,12 @@ namespace Linq2CouchBaseLiteExpression.Tests.Domain
 
         public string Name { get; set; }
 
+        /// <summary>
+        /// Birthday date
+        /// </summary>
+        /// <remarks>Can be null</remarks>
+        public DateTimeOffset? BirthDay { get; set; }
+
         public int Age { get; set; }
 
         public string SurName { get; set; }

@@ -22,11 +22,11 @@ namespace Linq2CouchBaseLiteExpression.Tests
             db = new Database(Guid.NewGuid().ToString());
 
             // Empty database, so we will create 6 sample documents :
-            CreateDocument("name1", "firstName1", 8, true, DateTimeOffset.UtcNow);
-            CreateDocument("name2", "", 8, true, DateTimeOffset.UtcNow.AddDays(-1));
-            CreateDocument("name3", "firstName3", 12, true, DateTimeOffset.UtcNow);
-            CreateDocument("name4", "", 9, false, DateTimeOffset.UtcNow.AddDays(-1));
-            CreateDocument("name5", "firstName5", 7, false, DateTimeOffset.UtcNow);
+            CreateDocument("name1", "firstName1", 8, true, null, DateTimeOffset.UtcNow);
+            CreateDocument("name2", "", 8, true, null, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name3", "firstName3", 12, true, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
+            CreateDocument("name4", "", 9, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name5", "firstName5", 7, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
         }
 
         public virtual void CloseConnection()
@@ -42,8 +42,9 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// <param name="surName"></param>
         /// <param name="age"></param>
         /// <param name="isHuman"></param>
+        /// <param name="birthday"></param>
         /// <param name="createdAt"></param>
-        private void CreateDocument(string name, string surName, int age, bool isHuman, DateTimeOffset createdAt)
+        private void CreateDocument(string name, string surName, int age, bool isHuman, DateTimeOffset? birthday, DateTimeOffset createdAt)
         {
             using (var newDocument = new MutableDocument())
             {
@@ -52,6 +53,11 @@ namespace Linq2CouchBaseLiteExpression.Tests
                             .SetInt("Age", age)
                             .SetBoolean("IsHuman", isHuman)
                             .SetDate("CreatedAt", createdAt);
+
+                if (birthday.HasValue)
+                    newDocument.SetDate("BirthDay", birthday.Value);
+                else
+                    newDocument.SetValue("BirthDay", null);
 
                 db.Save(newDocument);
             }
