@@ -23,7 +23,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
 
             // Empty database, so we will create 6 sample documents :
             CreateDocument("name1", "firstName1", 8, true, null, DateTimeOffset.UtcNow);
-            CreateDocument("name2", "", 8, true, null, DateTimeOffset.UtcNow.AddDays(-1));
+            CreateDocument("name2", null, 8, true, null, DateTimeOffset.UtcNow.AddDays(-1));
             CreateDocument("name3", "firstName3", 12, true, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
             CreateDocument("name4", "", 9, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(-1));
             CreateDocument("name5", "firstName5", 7, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);

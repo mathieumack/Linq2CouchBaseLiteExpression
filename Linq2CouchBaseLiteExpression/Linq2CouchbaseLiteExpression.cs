@@ -22,7 +22,7 @@ namespace Linq2CouchBaseLiteExpression
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        private static Couchbase.Lite.Query.IExpression GenerateFromExpression(Expression expression) 
+        private static Couchbase.Lite.Query.IExpression GenerateFromExpression(Expression expression)
         {
             if (expression is BinaryExpression)
                 return GenerateFromExpression(expression as BinaryExpression);
@@ -40,7 +40,7 @@ namespace Linq2CouchBaseLiteExpression
                     return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
                             .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
             }
-            
+
             throw new NotSupportedException("expression of type (" + expression.GetType().ToString() + ") are not supported.");
         }
 
@@ -55,10 +55,10 @@ namespace Linq2CouchBaseLiteExpression
             switch (expression.NodeType)
             {
                 case ExpressionType.Not:
-                {
-                    var subExpression = GenerateFromExpression(expression.Operand);
-                    return Couchbase.Lite.Query.Expression.Not(subExpression);
-                }
+                    {
+                        var subExpression = GenerateFromExpression(expression.Operand);
+                        return Couchbase.Lite.Query.Expression.Not(subExpression);
+                    }
                 default:
                     throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
             }
@@ -72,7 +72,7 @@ namespace Linq2CouchBaseLiteExpression
         /// <returns></returns>
         private static Couchbase.Lite.Query.IExpression GenerateFromExpression(BinaryExpression expression)
         {
-            if(IsCompareFieldNodeType(expression.NodeType))
+            if (IsCompareFieldNodeType(expression.NodeType))
             {
                 var leftExpression = GetValueFromExpression(expression.Left, null);
                 var rightExpression = GetValueFromExpression(expression.Right, null);
@@ -174,7 +174,7 @@ namespace Linq2CouchBaseLiteExpression
         /// <returns></returns>
         private static Couchbase.Lite.Query.IExpression GenerateFromExpression(MethodCallExpression expression)
         {
-            if(expression.Method.Name.Equals("Equals"))
+            if (expression.Method.Name.Equals("Equals"))
             {
                 return Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(expression.Object, null).ToString())
                                    .EqualTo(Couchbase.Lite.Query.Expression.Value(GetValueFromExpression(expression.Arguments[0], null)));
@@ -215,11 +215,21 @@ namespace Linq2CouchBaseLiteExpression
             }
             else if (expression is ConstantExpression)
             {
-                var constExpression = (expression as ConstantExpression);
-                Type t = constExpression.Value.GetType();
-                if (t.Equals(typeof(bool)) || t.Equals(typeof(int)) || t.Equals(typeof(string)))
+                var constExpression = expression as ConstantExpression;
+                var t = constExpression?.Value?.GetType();
+
+                if (t is null)
+                {
+                    return null;
+                }
+                else if (t.Equals(typeof(bool)) || t.Equals(typeof(int)) || t.Equals(typeof(string)))
+                {
                     return constExpression.Value;
-                return t.InvokeMember(memberName, BindingFlags.GetField, null, constExpression.Value, null);
+                }
+                else
+                {
+                    return t.InvokeMember(memberName, BindingFlags.GetField, null, constExpression.Value, null);
+                }
             }
             else if (expression is MethodCallExpression)
             {
