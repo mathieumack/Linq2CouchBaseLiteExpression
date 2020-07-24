@@ -33,7 +33,11 @@ namespace Linq2CouchBaseLiteExpression
             else if (expression is MemberExpression)
             {
                 var memberValue = GetValueFromExpression(expression, null);
-                return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
+                if((expression as MemberExpression).Member.Name.Equals("HasValue"))
+                    return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
+                                .NotEqualTo(Couchbase.Lite.Query.Expression.Value(null));
+                else 
+                    return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
                             .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
             }
             
