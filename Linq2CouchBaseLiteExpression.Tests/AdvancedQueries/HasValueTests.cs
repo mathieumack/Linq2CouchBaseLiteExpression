@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Linq2CouchBaseLiteExpression.Tests.Domain;
+﻿using Linq2CouchBaseLiteExpression.Tests.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Linq2CouchBaseLiteExpression.Tests.AdvancedQueries
