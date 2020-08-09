@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -187,6 +189,35 @@ namespace Linq2CouchBaseLiteExpression
                                    .Or(
                         Couchbase.Lite.Query.Expression.Property(GetValueFromExpression(fieldName, null).ToString())
                                    .EqualTo(Couchbase.Lite.Query.Expression.Value(string.Empty)));
+            }
+            else if (expression.Method.Name.Equals("Contains"))
+            {
+                var fieldName = expression.Arguments[0];
+                var fieldPropertyName = GetValueFromExpression(fieldName, null).ToString();
+
+                Couchbase.Lite.Query.IExpression sampleOr = null;
+
+                var value = GetValueFromExpression(expression.Object, null);
+                if (value is IEnumerable)
+                {
+                    foreach (var subValue in (value as IEnumerable))
+                    {
+                        var currentLoopExpression = Couchbase.Lite.Query.Expression.Property(fieldPropertyName)
+                                                        .EqualTo(Couchbase.Lite.Query.Expression.Value(subValue));
+                        if (sampleOr is null)
+                            sampleOr = currentLoopExpression;
+                        else
+                            sampleOr = sampleOr.Or(currentLoopExpression);
+                    }
+
+                    if(sampleOr != null) // At least one element available in the list
+                        return sampleOr;
+                    else
+                        // no elements in the source, so the test can not work
+                        return Couchbase.Lite.Query.Expression.Boolean(false)
+                                                        .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
+                }
+                
             }
             else if (expression.Arguments.Count == 0)
             {
