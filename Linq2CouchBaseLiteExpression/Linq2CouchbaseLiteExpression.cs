@@ -198,9 +198,10 @@ namespace Linq2CouchBaseLiteExpression
                 Couchbase.Lite.Query.IExpression sampleOr = null;
 
                 var value = GetValueFromExpression(expression.Object, null);
-                if (value is IEnumerable)
+                var myList = value as IEnumerable;
+                if (!(myList is null))
                 {
-                    foreach (var subValue in (value as IEnumerable))
+                    foreach (var subValue in myList)
                     {
                         var currentLoopExpression = Couchbase.Lite.Query.Expression.Property(fieldPropertyName)
                                                         .EqualTo(Couchbase.Lite.Query.Expression.Value(subValue));
@@ -214,8 +215,7 @@ namespace Linq2CouchBaseLiteExpression
                         return sampleOr;
                     else
                         // no elements in the source, so the test can not work
-                        return Couchbase.Lite.Query.Expression.Boolean(false)
-                                                        .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
+                        return Couchbase.Lite.Query.Expression.Boolean(false);
                 }
                 
             }
