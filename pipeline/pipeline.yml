@@ -1,0 +1,84 @@
+name: '$(Date:yyyy).1$(Date:MMdd)$(Rev:.r)'
+
+pool:
+  vmImage: "windows-2019"
+
+variables:
+- name: BuildConfiguration
+  value: release
+
+# specific branch build with batching
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
+steps:
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.4.1'
+  inputs:
+    versionSpec: 4.4.1
+    checkLatest: true
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet restore'
+  inputs:
+    command: restore
+    projects: |
+     **/*.csproj
+     
+  continueOnError: true
+  
+- task: SonarSource.sonarcloud.14d9cde6-c1da-4d55-aa01-2965cd301255.SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: SonarCloud
+    organization: 'mathieumack-github'
+    projectKey: 'github-$(Build.DefinitionName)'
+    projectName: '$(Build.DefinitionName)'
+    projectVersion: '$(Build.BuildNumber)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build PR'
+  inputs:
+    projects: '**/*.csproj'
+    arguments: '-c $(BuildConfiguration) -p:FileVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber)-alpha'
+  condition: eq(variables['Build.Reason'], 'PullRequest')
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    projects: '**/*.csproj'
+    arguments: '-c $(BuildConfiguration) -p:FileVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber)'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet test'
+  inputs:
+    command: test
+    projects: |
+     **/*Tests.csproj     
+    arguments: '-c $(BuildConfiguration) --no-build /p:CollectCoverage=true /p:CoverletOutputFormat=opencover --collect:"Code Coverage" /p:CoverletOutput="$(Agent.TempDirectory)/"'
+  continueOnError: true
+
+- task: NuGetCommand@2
+  displayName: 'NuGet push'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.SourcesDirectory)/**/*.nupkg'
+    nuGetFeedType: external
+    publishFeedCredentials: Nuget.org
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: drop'
+  inputs:
+    PathtoPublish: '$(Agent.TempDirectory)'
+  enabled: false
+  condition: succeededOrFailed()
+
+- task: SonarSource.sonarcloud.ce096e50-6155-4de8-8800-4221aaeed4a1.SonarCloudAnalyze@1
+  displayName: 'Run Code Analysis'
+
+- task: SonarSource.sonarcloud.38b27399-a642-40af-bb7d-9971f69712e8.SonarCloudPublish@1
+  displayName: 'Publish Quality Gate Result'

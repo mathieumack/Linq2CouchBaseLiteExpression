@@ -15,6 +15,6 @@
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     
     <IsTestProject>$(MSBuildProjectName.Contains('UnitTest'))</IsTestProject>
-    <IsLibraryProject>$(MSBuildProjectName.Contains('MvvX.Plugins.ServiceMaxMobile'))</IsLibraryProject>
+    <IsLibraryProject>$(MSBuildProjectName.Contains('Linq2CouchBaseLiteExpression'))</IsLibraryProject>
   </PropertyGroup>  
 </Project>
