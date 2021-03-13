@@ -51,7 +51,7 @@ steps:
   inputs:
     projects: '**/*.csproj'
     arguments: '-c $(BuildConfiguration) -p:FileVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber)'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
