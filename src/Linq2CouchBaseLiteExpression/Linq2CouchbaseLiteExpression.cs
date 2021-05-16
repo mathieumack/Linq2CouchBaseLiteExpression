@@ -193,31 +193,42 @@ namespace Linq2CouchBaseLiteExpression
             else if (expression.Method.Name.Equals("Contains"))
             {
                 var fieldName = expression.Arguments[0];
-                var fieldPropertyName = GetValueFromExpression(fieldName, null).ToString();
+                var fieldPropertyName = GetValueFromExpression(fieldName, null)?.ToString();
 
                 Couchbase.Lite.Query.IExpression sampleOr = null;
 
                 var value = GetValueFromExpression(expression.Object, null);
-                var myList = value as IEnumerable;
-                if (!(myList is null))
+                if (value is string)
                 {
-                    foreach (var subValue in myList)
-                    {
-                        var currentLoopExpression = Couchbase.Lite.Query.Expression.Property(fieldPropertyName)
-                                                        .EqualTo(Couchbase.Lite.Query.Expression.Value(subValue));
-                        if (sampleOr is null)
-                            sampleOr = currentLoopExpression;
-                        else
-                            sampleOr = sampleOr.Or(currentLoopExpression);
-                    }
-
-                    if(sampleOr != null) // At least one element available in the list
-                        return sampleOr;
+                    if(!string.IsNullOrWhiteSpace(fieldPropertyName))
+                        return Couchbase.Lite.Query.Expression.Property(value.ToString())
+                                   .Like(Couchbase.Lite.Query.Expression.String($"%{fieldPropertyName}%"));
                     else
                         // no elements in the source, so the test can not work
                         return Couchbase.Lite.Query.Expression.Boolean(false);
                 }
-                
+                else
+                {
+                    var myList = value as IEnumerable;
+                    if (!(myList is null))
+                    {
+                        foreach (var subValue in myList)
+                        {
+                            var currentLoopExpression = Couchbase.Lite.Query.Expression.Property(fieldPropertyName)
+                                                            .EqualTo(Couchbase.Lite.Query.Expression.Value(subValue));
+                            if (sampleOr is null)
+                                sampleOr = currentLoopExpression;
+                            else
+                                sampleOr = sampleOr.Or(currentLoopExpression);
+                        }
+
+                        if (sampleOr != null) // At least one element available in the list
+                            return sampleOr;
+                        else
+                            // no elements in the source, so the test can not work
+                            return Couchbase.Lite.Query.Expression.Boolean(false);
+                    }
+                }
             }
             else if (expression.Arguments.Count == 0)
             {
