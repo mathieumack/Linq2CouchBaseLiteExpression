@@ -42,6 +42,16 @@ namespace Linq2CouchBaseLiteExpression
                     return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
                             .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
             }
+            else if(expression is ConditionalExpression)
+            {
+                var testExpression = expression as ConditionalExpression;
+
+                var result = (bool)(Expression.Lambda(testExpression.Test).Compile().DynamicInvoke());
+                if (result)
+                    return GenerateFromExpression(testExpression.IfTrue);
+                else
+                    return GenerateFromExpression(testExpression.IfFalse);
+            }
 
             throw new NotSupportedException("expression of type (" + expression.GetType().ToString() + ") are not supported.");
         }
