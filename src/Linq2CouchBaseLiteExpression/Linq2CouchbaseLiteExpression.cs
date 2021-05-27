@@ -35,14 +35,14 @@ namespace Linq2CouchBaseLiteExpression
             else if (expression is MemberExpression)
             {
                 var memberValue = GetValueFromExpression(expression, null);
-                if((expression as MemberExpression).Member.Name.Equals("HasValue"))
+                if ((expression as MemberExpression).Member.Name.Equals("HasValue"))
                     return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
                                 .NotEqualTo(Couchbase.Lite.Query.Expression.Value(null));
-                else 
+                else
                     return Couchbase.Lite.Query.Expression.Property(memberValue.ToString())
                             .EqualTo(Couchbase.Lite.Query.Expression.Boolean(true));
             }
-            else if(expression is ConditionalExpression)
+            else if (expression is ConditionalExpression)
             {
                 var testExpression = expression as ConditionalExpression;
 
@@ -51,6 +51,11 @@ namespace Linq2CouchBaseLiteExpression
                     return GenerateFromExpression(testExpression.IfTrue);
                 else
                     return GenerateFromExpression(testExpression.IfFalse);
+            }
+            else if (expression is ConstantExpression)
+            {
+                var memberValue = GetValueFromExpression(expression, null);
+                return Couchbase.Lite.Query.Expression.Value(memberValue);
             }
 
             throw new NotSupportedException("expression of type (" + expression.GetType().ToString() + ") are not supported.");

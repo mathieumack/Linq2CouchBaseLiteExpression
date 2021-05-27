@@ -22,7 +22,15 @@ namespace Linq2CouchBaseLiteExpression.Tests.AdvancedQueries
         public void ConditionalIf_Exists()
         {
             var test = 10;
-            CheckCount<EntityObject>((e) => (test > 0 ? e.Age > 0 : true), 1);
+            CheckCount<EntityObject>((e) => (test > 0 ? e.Age > 0 : true), 5);
+        }
+
+
+        [TestMethod]
+        public void ConditionalIf_NoResults()
+        {
+            var test = -1;
+            CheckCount<EntityObject>((e) => (test > 0 ? e.Age > 0 : false), 0);
         }
     }
 }
