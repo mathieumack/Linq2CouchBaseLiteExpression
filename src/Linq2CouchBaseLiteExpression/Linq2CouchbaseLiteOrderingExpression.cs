@@ -12,10 +12,21 @@ namespace Linq2CouchBaseLiteExpression
         /// <param name="expression"></param>
         /// <param name="ascending">True = ascending, False = Descending</param>
         /// <returns></returns>
-        public static IOrdering GenerateFromExpression<TSource, TKey>(Expression<Func<TSource, TKey>> expression,
+        public static IOrdering GenerateOrderByFromLambda(System.Linq.Expressions.Expression expression,
                                                                         bool ascending)
         {
-            return GenerateFromExpression(expression.Body, ascending);
+            return GenerateFromExpression(expression, ascending);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <param name="ascending">True = ascending, False = Descending</param>
+        /// <returns></returns>
+        public static IOrdering GenerateOrderByFromExpression<TSource, TKey>(System.Linq.Expressions.Expression<Func<TSource, TKey>> expression,
+                                                                        bool ascending)
+        {
+            return GenerateFromExpression(expression, ascending);
         }
 
         #region Global type expression :
@@ -28,7 +39,7 @@ namespace Linq2CouchBaseLiteExpression
         private static IOrdering GenerateFromExpression(System.Linq.Expressions.Expression expression,
                                                             bool ascending)
         {
-            var memberValue = GetValueFromExpression(expression, null);
+            var memberValue = GetValueFromExpression(expression);
             var sort = Ordering.Property((string)memberValue);
             if(ascending)
                 return sort.Ascending();
@@ -41,7 +52,7 @@ namespace Linq2CouchBaseLiteExpression
 
         #region Generic methods
 
-        private static object GetValueFromExpression(System.Linq.Expressions.Expression expression, string memberName)
+        private static object GetValueFromExpression(System.Linq.Expressions.Expression expression)
         {
             if (expression is MemberExpression)
             {
@@ -51,9 +62,14 @@ namespace Linq2CouchBaseLiteExpression
                 else
                 {
                     // Current limitation : You can only filter on level one for fields
-                    var currentName = GetValueFromExpression(exp.Expression, exp.Member.Name);
+                    var currentName = GetValueFromExpression(exp.Expression);
                     return currentName;
                 }
+            }
+            else if (expression is LambdaExpression)
+            {
+                var exp = expression as LambdaExpression;
+                return GetValueFromExpression(exp.Body);
             }
 
             throw new NotSupportedException("expression of type type (" + expression.NodeType.ToString() + ") are not supported.");

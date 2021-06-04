@@ -93,7 +93,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// <param name="orderByExpression"></param>
         protected List<string> GetAllAndSort<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
-            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, true);
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateOrderByFromExpression(orderByExpression, true);
 
             // Check filters :
             using (var query = QueryBuilder.Select(SelectResult.Property("Name"))
@@ -113,7 +113,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// <param name="orderByExpression"></param>
         protected List<string> GetAllAndSortDescending<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
-            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, false);
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateOrderByFromExpression(orderByExpression, false);
 
             // Check filters :
             using (var query = QueryBuilder.Select(SelectResult.Property("Name"))
@@ -133,7 +133,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// <param name="orderByExpression"></param>
         protected List<int> GetAllAndSortInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
-            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, true);
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateOrderByFromExpression(orderByExpression, true);
 
             // Check filters :
             using (var query = QueryBuilder.Select(SelectResult.Property("Age"))
@@ -153,7 +153,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// <param name="orderByExpression"></param>
         protected List<int> GetAllAndSortDescendingInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
-            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, false);
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateOrderByFromExpression(orderByExpression, false);
 
             // Check filters :
             using (var query = QueryBuilder.Select(SelectResult.Property("Age"))
