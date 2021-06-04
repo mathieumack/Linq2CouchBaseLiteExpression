@@ -1,6 +1,8 @@
 ﻿using Linq2CouchBaseLiteExpression.Tests.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Linq2CouchBaseLiteExpression.Tests.Ordering
 {
@@ -22,7 +24,8 @@ namespace Linq2CouchBaseLiteExpression.Tests.Ordering
         [TestMethod]
         public void OrderByName_Ascending()
         {
-            var results = GetAllAndSort<EntityObject, string>(e => e.Name);
+            EntityObject entity;
+            var results = GetAllAndSort((EntityObject e) => e.Name);
             for(int i = 1; i <=5; i++)
             {
                 Assert.AreEqual($"name{i}", results[i - 1]);
@@ -32,7 +35,7 @@ namespace Linq2CouchBaseLiteExpression.Tests.Ordering
         [TestMethod]
         public void OrderByName_Descending()
         {
-            var results = GetAllAndSortDescending<EntityObject, string>(e => e.Name);
+            var results = GetAllAndSortDescending((EntityObject e) => e.Name);
             for (int i = 1; i <= 5; i++)
             {
                 Assert.AreEqual($"name{6-i}", results[i - 1]);
@@ -40,11 +43,14 @@ namespace Linq2CouchBaseLiteExpression.Tests.Ordering
         }
 
         [TestMethod]
-        public void OrderByAgeOnSubField_Ascending()
+        public void OrderByAge_Ascending()
         {
-            var results = GetAllAndSortInt<EntityObject, int>(e => e.Age);
+            var results = GetAllAndSortInt((EntityObject e) => e.Age);
 
             var values = new List<int>() { 7, 8, 8, 9, 12 };
+            
+            Enumerable.OrderBy(values, e => e);
+
             for (int i = 0; i < 5; i++)
             {
                 Assert.AreEqual(values[i], results[i]);
@@ -52,9 +58,9 @@ namespace Linq2CouchBaseLiteExpression.Tests.Ordering
         }
 
         [TestMethod]
-        public void OrderByAgeOnSubField_Descending()
+        public void OrderByAge_Descending()
         {
-            var results = GetAllAndSortDescendingInt<EntityObject, int>(e => e.Age);
+            var results = GetAllAndSortDescendingInt((EntityObject e) => e.Age);
             
             var values = new List<int>() { 7, 8, 8, 9, 12 };
             for (int i = 0; i < 5; i++)

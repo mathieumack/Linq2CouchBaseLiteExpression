@@ -91,7 +91,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="orderByExpression"></param>
-        protected List<string> GetAllAndSort<T, TResult>(Expression<Func<T, TResult>> orderByExpression) where T : class
+        protected List<string> GetAllAndSort<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
             var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, true);
 
@@ -111,7 +111,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="orderByExpression"></param>
-        protected List<string> GetAllAndSortDescending<T, TKey>(Expression<Func<T, TKey>> orderByExpression) where T : class
+        protected List<string> GetAllAndSortDescending<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
             var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, false);
 
@@ -131,7 +131,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="orderByExpression"></param>
-        protected List<int> GetAllAndSortInt<T, TResult>(Expression<Func<T, TResult>> orderByExpression) where T : class
+        protected List<int> GetAllAndSortInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
             var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, true);
 
@@ -151,7 +151,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="orderByExpression"></param>
-        protected List<int> GetAllAndSortDescendingInt<T, TKey>(Expression<Func<T, TKey>> orderByExpression) where T : class
+        protected List<int> GetAllAndSortDescendingInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
         {
             var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, false);
 

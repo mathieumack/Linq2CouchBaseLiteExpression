@@ -1,5 +1,6 @@
 ﻿using Couchbase.Lite.Query;
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace Linq2CouchBaseLiteExpression
@@ -11,8 +12,8 @@ namespace Linq2CouchBaseLiteExpression
         /// <param name="expression"></param>
         /// <param name="ascending">True = ascending, False = Descending</param>
         /// <returns></returns>
-        public static IOrdering GenerateFromExpression<T, TResult>(Expression<Func<T, TResult>> expression,
-                                                                    bool ascending)
+        public static IOrdering GenerateFromExpression<TSource, TKey>(Expression<Func<TSource, TKey>> expression,
+                                                                        bool ascending)
         {
             return GenerateFromExpression(expression.Body, ascending);
         }
