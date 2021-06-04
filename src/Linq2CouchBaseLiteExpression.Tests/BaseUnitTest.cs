@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using Couchbase.Lite;
@@ -51,6 +52,8 @@ namespace Linq2CouchBaseLiteExpression.Tests
                 newDocument.SetString("Name", name)
                             .SetString("SurName", surName)
                             .SetInt("Age", age)
+                            .SetInt("SubObject.Value", age)
+                            .SetInt("SubObject.SubSubObject.Value", age)
                             .SetBoolean("IsHuman", isHuman)
                             .SetDate("CreatedAt", createdAt);
 
@@ -71,7 +74,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// <param name="expectedCount"></param>
         protected void CheckCount<T>(Expression<Func<T, bool>> filterExpression, int expectedCount) where T : class
         {
-            var resultFilter = Linq2CouchbaseLiteExpression.GenerateFromExpression(filterExpression);
+            var resultFilter = Linq2CouchbaseLiteQueryExpression.GenerateFromExpression(filterExpression);
 
             // Check filters :
             using (var query = QueryBuilder.Select(SelectResult.Expression(Meta.ID))
@@ -80,6 +83,86 @@ namespace Linq2CouchBaseLiteExpression.Tests
             {
                 var count = query.Execute().Count();
                 Assert.AreEqual(expectedCount, count);
+            }
+        }
+
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<string> GetAllAndSort<T, TResult>(Expression<Func<T, TResult>> orderByExpression) where T : class
+        {
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, true);
+
+            // Check filters :
+            using (var query = QueryBuilder.Select(SelectResult.Property("Name"))
+                                            .From(DataSource.Database(db))
+                                            .OrderBy(resultFilter))
+            {
+                return query.Execute()
+                        .Select(row => row.GetString("Name"))
+                        .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<string> GetAllAndSortDescending<T, TKey>(Expression<Func<T, TKey>> orderByExpression) where T : class
+        {
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, false);
+
+            // Check filters :
+            using (var query = QueryBuilder.Select(SelectResult.Property("Name"))
+                                            .From(DataSource.Database(db))
+                                            .OrderBy(resultFilter))
+            {
+                return query.Execute()
+                        .Select(row => row.GetString("Name"))
+                        .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<int> GetAllAndSortInt<T, TResult>(Expression<Func<T, TResult>> orderByExpression) where T : class
+        {
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, true);
+
+            // Check filters :
+            using (var query = QueryBuilder.Select(SelectResult.Property("Age"))
+                                            .From(DataSource.Database(db))
+                                            .OrderBy(resultFilter))
+            {
+                return query.Execute()
+                        .Select(row => row.GetInt("Age"))
+                        .ToList();
+            }
+        }
+
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<int> GetAllAndSortDescendingInt<T, TKey>(Expression<Func<T, TKey>> orderByExpression) where T : class
+        {
+            var resultFilter = Linq2CouchbaseLiteOrderingExpression.GenerateFromExpression(orderByExpression, false);
+
+            // Check filters :
+            using (var query = QueryBuilder.Select(SelectResult.Property("Age"))
+                                            .From(DataSource.Database(db))
+                                            .OrderBy(resultFilter))
+            {
+                return query.Execute()
+                        .Select(row => row.GetInt("Age"))
+                        .ToList();
             }
         }
     }
