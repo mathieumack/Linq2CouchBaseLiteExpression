@@ -12,17 +12,6 @@ namespace Linq2CouchBaseLiteExpression
         /// <param name="expression"></param>
         /// <param name="ascending">True = ascending, False = Descending</param>
         /// <returns></returns>
-        public static IOrdering GenerateOrderByFromLambda(System.Linq.Expressions.Expression expression,
-                                                                        bool ascending)
-        {
-            return GenerateFromExpression(expression, ascending);
-        }
-
-        /// <summary>
-        /// </summary>
-        /// <param name="expression"></param>
-        /// <param name="ascending">True = ascending, False = Descending</param>
-        /// <returns></returns>
         public static IOrdering GenerateOrderByFromExpression<TSource, TKey>(System.Linq.Expressions.Expression<Func<TSource, TKey>> expression,
                                                                         bool ascending)
         {
