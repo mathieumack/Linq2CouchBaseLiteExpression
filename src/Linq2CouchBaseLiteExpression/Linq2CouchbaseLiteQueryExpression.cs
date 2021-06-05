@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Linq2CouchBaseLiteExpression
 {
-    public static class Linq2CouchbaseLiteExpression
+    public static class Linq2CouchbaseLiteQueryExpression
     {
         /// <summary>
         /// </summary>

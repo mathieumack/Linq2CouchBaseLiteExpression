@@ -27,6 +27,11 @@ namespace Linq2CouchBaseLiteExpression.Tests.Domain
         public string Name { get; set; }
 
         /// <summary>
+        /// Sub object
+        /// </summary>
+        public EntitySubObject SubObject { get; set; }
+
+        /// <summary>
         /// Enumeration value
         /// </summary>
         public EntityType TypeOfObject { get; set; }
