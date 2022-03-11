@@ -238,7 +238,11 @@ namespace Linq2CouchBaseLiteExpression
                 // The method return a value : can only be called on public and static methods
                 var method = expression.Method;
                 object result = method.Invoke(null, null);
-                return $"\"{result}\"";
+
+                if (result is string)
+                    return $"\"{result}\"";
+                else
+                    return result.ToString();
             }
 
             throw new NotSupportedException("expression of type (" + expression.NodeType.ToString() + ") are not supported : " + expression.Method.Name);
