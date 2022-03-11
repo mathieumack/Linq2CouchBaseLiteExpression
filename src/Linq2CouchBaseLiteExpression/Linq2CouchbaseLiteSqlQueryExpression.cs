@@ -53,7 +53,7 @@ namespace Linq2CouchBaseLiteExpression
             else if (expression is ConstantExpression)
             {
                 var memberValue = GetValueFromExpression(expression, null);
-                return memberValue; // Couchbase.Lite.Query.Expression.Value(memberValue);
+                return memberValue;
             }
 
             throw new NotSupportedException("expression of type (" + expression.GetType().ToString() + ") are not supported.");
@@ -284,7 +284,7 @@ namespace Linq2CouchBaseLiteExpression
                 if (resultObject is null)
                     return "NULL";
                 else if (resultObject is string)
-                    return $"\"{resultObject.ToString().Replace("\"", "\\\"")}\"";
+                    return $"\"{resultObject.ToString().Replace("\"", "\"\"")}\"";
                 else
                     return $"{resultObject}";
             }

@@ -13,8 +13,6 @@ namespace Linq2CouchBaseLiteExpression.Tests
         /// </summary>
         public virtual void TestInitialize()
         {
-            //Couchbase.Lite.Support.NetDesktop.Activate();
-
             db = new Database(Guid.NewGuid().ToString());
 
             // Empty database, so we will create 6 sample documents :
@@ -22,7 +20,7 @@ namespace Linq2CouchBaseLiteExpression.Tests
             CreateDocument("name2", null, 8, true, null, DateTimeOffset.UtcNow.AddDays(-1));
             CreateDocument("name3", "firstName3", 12, true, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
             CreateDocument("name4", "", 9, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow.AddDays(-1));
-            CreateDocument("name5", "firstName5", 7, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
+            CreateDocument("name5", "sur \"Name\"", 7, false, DateTimeOffset.UtcNow, DateTimeOffset.UtcNow);
         }
 
         public virtual void CloseConnection()

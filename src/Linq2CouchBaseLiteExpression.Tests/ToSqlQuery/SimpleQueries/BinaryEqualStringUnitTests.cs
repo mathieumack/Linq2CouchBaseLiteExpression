@@ -25,6 +25,12 @@ namespace Linq2CouchBaseLiteExpression.Tests.ToSqlQuery.SimpleQueries
         }
 
         [TestMethod]
+        public void Binary_Equal_ValueConstants_Void_SpecialChar()
+        {
+            CheckCount<EntityObject>((e) => e.SurName == "sur \"Name\"", 1);
+        }
+
+        [TestMethod]
         public void Binary_Equal_ValueConstants_Exists()
         {
             CheckCount<EntityObject>((e) => e.Name == "name4", 1);
