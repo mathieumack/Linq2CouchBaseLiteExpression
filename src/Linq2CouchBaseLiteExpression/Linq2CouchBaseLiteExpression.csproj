@@ -1,4 +1,4 @@
-﻿<Project Sdk="MSBuild.Sdk.Extras">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <ProjectGuid>{49A4AC1F-5E11-57A4-8436-9FBA3C5D87DE}</ProjectGuid>
@@ -18,6 +18,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Couchbase.Lite" Version="2.8.6" />
+    <PackageReference Include="Couchbase.Lite" Version="3.0.0" />
   </ItemGroup>
 </Project>

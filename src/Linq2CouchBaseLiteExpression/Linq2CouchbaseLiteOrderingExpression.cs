@@ -12,7 +12,7 @@ namespace Linq2CouchBaseLiteExpression
         /// <param name="expression"></param>
         /// <param name="ascending">True = ascending, False = Descending</param>
         /// <returns></returns>
-        public static IOrdering GenerateOrderByFromExpression<TSource, TKey>(System.Linq.Expressions.Expression<Func<TSource, TKey>> expression,
+        public static IOrdering GenerateOrderByFromExpression<TSource, TKey>(Expression<Func<TSource, TKey>> expression,
                                                                         bool ascending)
         {
             return GenerateFromExpression(expression, ascending);
@@ -37,7 +37,6 @@ namespace Linq2CouchBaseLiteExpression
         }
 
         #endregion
-
 
         #region Generic methods
 

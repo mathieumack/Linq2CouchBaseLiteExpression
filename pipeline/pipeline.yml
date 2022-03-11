@@ -1,7 +1,7 @@
 name: '$(Date:yyyy).1$(Date:MMdd)$(Rev:.r)'
 
 pool:
-  vmImage: "windows-2019"
+  vmImage: "windows-latest"
 
 variables:
 - name: BuildConfiguration
@@ -15,6 +15,12 @@ trigger:
     - master
 
 steps:
+- task: UseDotNet@2
+  displayName: Use .NET 6.0
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
 - task: NuGetToolInstaller@0
   displayName: 'Use NuGet 4.4.1'
   inputs:
