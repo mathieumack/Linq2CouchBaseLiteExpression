@@ -20,7 +20,7 @@ namespace Linq2CouchBaseLiteExpression.Tests.ToSqlQuery
             var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateFromExpression(filterExpression);
 
             // Check filters :
-            using (var query = db.CreateQuery($"SELECT ID FROM _ WHERE {sqlQuery}"))
+            using (var query = db.CreateQuery($"SELECT ID FROM _ {sqlQuery}"))
             {
                 var count = query.Execute().Count();
                 Assert.AreEqual(expectedCount, count);

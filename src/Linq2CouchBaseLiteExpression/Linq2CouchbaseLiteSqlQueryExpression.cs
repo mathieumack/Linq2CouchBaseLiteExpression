@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -13,7 +12,8 @@ namespace Linq2CouchBaseLiteExpression
         /// <returns>SQL expression</returns>
         public static string GenerateFromExpression<T>(Expression<Func<T, bool>> expression)
         {
-            return GenerateFromExpression(expression.Body);
+            var sqlQuery = GenerateFromExpression(expression.Body);
+            return $"WHERE {sqlQuery}";
         }
 
 
@@ -36,7 +36,7 @@ namespace Linq2CouchBaseLiteExpression
             {
                 var memberValue = GetValueFromExpression(expression, null);
                 if ((expression as MemberExpression).Member.Name.Equals("HasValue"))
-                    return $"{memberValue} IS NULL";
+                    return $"{memberValue} <> null";
                 else
                     return $"{memberValue} == true";
             }
@@ -72,7 +72,7 @@ namespace Linq2CouchBaseLiteExpression
                 case ExpressionType.Not:
                     {
                         var subExpression = GenerateFromExpression(expression.Operand);
-                        return $"!({subExpression})";
+                        return $"NOT ({subExpression})";
                     }
                 default:
                     throw new NotSupportedException("expression node type (" + expression.NodeType.ToString() + ") are not supported.");
@@ -281,7 +281,9 @@ namespace Linq2CouchBaseLiteExpression
                     resultObject = t.InvokeMember(memberName, BindingFlags.GetField, null, constExpression.Value, null);
                 }
 
-                if(resultObject is string)
+                if (resultObject is null)
+                    return "NULL";
+                else if (resultObject is string)
                     return $"\"{resultObject.ToString().Replace("\"", "\\\"")}\"";
                 else
                     return $"{resultObject}";
