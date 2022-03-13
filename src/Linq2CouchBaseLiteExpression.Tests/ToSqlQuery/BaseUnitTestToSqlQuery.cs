@@ -27,76 +27,76 @@ namespace Linq2CouchBaseLiteExpression.Tests.ToSqlQuery
             }
         }
 
-        ///// <summary>
-        ///// Execute a query, count results and call an assertion to check that results count is equal to expected results
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="orderByExpression"></param>
-        //protected List<string> GetAllAndSort<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
-        //{
-        //    var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, true);
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<string> GetAllAndSort<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
+        {
+            var sqlQuery = Linq2CouchbaseLiteOrderingSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, true);
 
-        //    // Check filters :
-        //    using (var query = db.CreateQuery(sqlQuery))
-        //    {
-        //        return query.Execute()
-        //                .Select(row => row.GetString("Name"))
-        //                .ToList();
-        //    }
-        //}
+            // Check filters :
+            using (var query = db.CreateQuery($"SELECT Name FROM _ {sqlQuery}"))
+            {
+                return query.Execute()
+                        .Select(row => row.GetString("Name"))
+                        .ToList();
+            }
+        }
 
-        ///// <summary>
-        ///// Execute a query, count results and call an assertion to check that results count is equal to expected results
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="orderByExpression"></param>
-        //protected List<string> GetAllAndSortDescending<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
-        //{
-        //    var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, false);
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<string> GetAllAndSortDescending<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
+        {
+            var sqlQuery = Linq2CouchbaseLiteOrderingSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, false);
 
-        //    // Check filters :
-        //    using (var query = db.CreateQuery(sqlQuery))
-        //    {
-        //        return query.Execute()
-        //                .Select(row => row.GetString("Name"))
-        //                .ToList();
-        //    }
-        //}
+            // Check filters :
+            using (var query = db.CreateQuery($"SELECT Name FROM _ {sqlQuery}"))
+            {
+                return query.Execute()
+                        .Select(row => row.GetString("Name"))
+                        .ToList();
+            }
+        }
 
-        ///// <summary>
-        ///// Execute a query, count results and call an assertion to check that results count is equal to expected results
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="orderByExpression"></param>
-        //protected List<int> GetAllAndSortInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
-        //{
-        //    var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, true);
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<int> GetAllAndSortInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
+        {
+            var sqlQuery = Linq2CouchbaseLiteOrderingSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, true);
 
-        //    // Check filters :
-        //    using (var query = db.CreateQuery(sqlQuery))
-        //    {
-        //        return query.Execute()
-        //                .Select(row => row.GetInt("Age"))
-        //                .ToList();
-        //    }
-        //}
+            // Check filters :
+            using (var query = db.CreateQuery($"SELECT Age FROM _ {sqlQuery}"))
+            {
+                return query.Execute()
+                        .Select(row => row.GetInt("Age"))
+                        .ToList();
+            }
+        }
 
-        ///// <summary>
-        ///// Execute a query, count results and call an assertion to check that results count is equal to expected results
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="orderByExpression"></param>
-        //protected List<int> GetAllAndSortDescendingInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
-        //{
-        //    var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, false);
+        /// <summary>
+        /// Execute a query, count results and call an assertion to check that results count is equal to expected results
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="orderByExpression"></param>
+        protected List<int> GetAllAndSortDescendingInt<TSource, TKey>(Expression<Func<TSource, TKey>> orderByExpression)
+        {
+            var sqlQuery = Linq2CouchbaseLiteOrderingSqlQueryExpression.GenerateOrderByFromExpression(orderByExpression, false);
 
-        //    // Check filters :
-        //    using (var query = db.CreateQuery(sqlQuery))
-        //    {
-        //        return query.Execute()
-        //                .Select(row => row.GetInt("Age"))
-        //                .ToList();
-        //    }
-        //}
+            // Check filters :
+            using (var query = db.CreateQuery($"SELECT Age FROM _ {sqlQuery}"))
+            {
+                return query.Execute()
+                        .Select(row => row.GetInt("Age"))
+                        .ToList();
+            }
+        }
     }
 }

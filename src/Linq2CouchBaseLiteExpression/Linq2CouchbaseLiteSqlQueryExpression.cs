@@ -53,7 +53,13 @@ namespace Linq2CouchBaseLiteExpression
             else if (expression is ConstantExpression)
             {
                 var memberValue = GetValueFromExpression(expression, null);
-                return memberValue;
+
+                if (memberValue is null)
+                    return "NULL";
+                else if (memberValue is string)
+                    return $"\"{memberValue.ToString().Replace("\"", "\"\"")}\"";
+                else
+                    return $"{memberValue}";
             }
 
             throw new NotSupportedException("expression of type (" + expression.GetType().ToString() + ") are not supported.");
@@ -252,7 +258,7 @@ namespace Linq2CouchBaseLiteExpression
 
         #region Generic methods
 
-        private static string GetValueFromExpression(Expression expression, string memberName)
+        private static object GetValueFromExpression(Expression expression, string memberName)
         {
             if (expression is MemberExpression)
             {
@@ -281,12 +287,7 @@ namespace Linq2CouchBaseLiteExpression
                     resultObject = t.InvokeMember(memberName, BindingFlags.GetField, null, constExpression.Value, null);
                 }
 
-                if (resultObject is null)
-                    return "NULL";
-                else if (resultObject is string)
-                    return $"\"{resultObject.ToString().Replace("\"", "\"\"")}\"";
-                else
-                    return $"{resultObject}";
+                return resultObject;
             }
             else if (expression is MethodCallExpression)
             {
