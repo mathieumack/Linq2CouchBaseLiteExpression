@@ -210,8 +210,6 @@ namespace Linq2CouchBaseLiteExpression
                 var fieldName = expression.Arguments[0];
                 var fieldPropertyName = GetValueFromExpression(fieldName, null)?.ToString();
 
-                Couchbase.Lite.Query.IExpression sampleOr = null;
-
                 var value = GetValueFromExpression(expression.Object, null);
                 if (value is string)
                 {
@@ -222,27 +220,20 @@ namespace Linq2CouchBaseLiteExpression
                         // no elements in the source, so the test can not work
                         return Couchbase.Lite.Query.Expression.Boolean(false);
                 }
-                else
+                else if(value is IEnumerable)
                 {
-                    var myList = value as IEnumerable;
-                    if (!(myList is null))
-                    {
-                        foreach (var subValue in myList)
-                        {
-                            var currentLoopExpression = Couchbase.Lite.Query.Expression.Property(fieldPropertyName)
-                                                            .EqualTo(Couchbase.Lite.Query.Expression.Value(subValue));
-                            if (sampleOr is null)
-                                sampleOr = currentLoopExpression;
-                            else
-                                sampleOr = sampleOr.Or(currentLoopExpression);
-                        }
+                    Couchbase.Lite.Query.IExpression sampleOr = Couchbase.Lite.Query.Expression.Boolean(false);
 
-                        if (sampleOr != null) // At least one element available in the list
-                            return sampleOr;
-                        else
-                            // no elements in the source, so the test can not work
-                            return Couchbase.Lite.Query.Expression.Boolean(false);
+                    var myList = value as IEnumerable;
+                    foreach (var subValue in myList)
+                    {
+                        var currentLoopExpression = Couchbase.Lite.Query.Expression.Property(fieldPropertyName)
+                                                        .EqualTo(Couchbase.Lite.Query.Expression.Value(subValue));
+                        
+                        sampleOr = sampleOr.Or(currentLoopExpression);
                     }
+
+                    return sampleOr;
                 }
             }
             else if (expression.Arguments.Count == 0)

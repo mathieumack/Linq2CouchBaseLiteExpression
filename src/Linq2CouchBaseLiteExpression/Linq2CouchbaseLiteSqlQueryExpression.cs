@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Text;
 
 namespace Linq2CouchBaseLiteExpression
 {
@@ -226,9 +227,8 @@ namespace Linq2CouchBaseLiteExpression
             }
             else if (expression.Method.Name.Equals("Contains"))
             {
-                string currentFieldName = "";
-
-                object value = null;
+                string currentFieldName;
+                object value;
 
                 if (IsFieldExpression(expression.Object))
                 {
@@ -244,16 +244,17 @@ namespace Linq2CouchBaseLiteExpression
                 if (value is IEnumerable && !(value is string))
                 {
                     var myList = value as IEnumerable;
-                    var sqlconditions = "";
+                    
+                    var sqlconditions = new StringBuilder("");
                     int i = 0;
                     foreach (var subValue in myList)
                     {
                         var stringValue = ConvertToSqlString(subValue);
-                        sqlconditions += $"{(i == 0 ? "" : " OR ")}({currentFieldName} == {stringValue})";
+                        sqlconditions.Append($"{(i == 0 ? "" : " OR ")}({currentFieldName} == {stringValue})");
                         i++;
                     }
 
-                    if (!string.IsNullOrWhiteSpace(sqlconditions)) // At least one element available in the list
+                    if (i > 0) // At least one element available in the list
                         return sqlconditions;
                     else
                         // no elements in the source, so the test can not work
@@ -303,7 +304,7 @@ namespace Linq2CouchBaseLiteExpression
                 var constExpression = expression as ConstantExpression;
                 var t = constExpression?.Value?.GetType();
 
-                var resultObject = (object)null;
+                object resultObject;
                 if (t is null)
                 {
                     resultObject = null;

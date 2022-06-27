@@ -14,7 +14,7 @@
     <Product />
     <Description>This package let you create linq queries to querying a couchbase lite database</Description>
     <Authors>MACK Mathieu</Authors>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression> 
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

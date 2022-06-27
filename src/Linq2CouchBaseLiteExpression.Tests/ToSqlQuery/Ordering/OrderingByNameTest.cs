@@ -24,7 +24,6 @@ namespace Linq2CouchBaseLiteExpression.Tests.ToSqlQuery.Ordering
         [TestMethod]
         public void OrderByName_Ascending()
         {
-            EntityObject entity;
             var results = GetAllAndSort((EntityObject e) => e.Name);
             for(int i = 1; i <=5; i++)
             {
