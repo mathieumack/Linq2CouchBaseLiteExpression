@@ -6,6 +6,12 @@ pool:
 variables:
 - name: BuildConfiguration
   value: release
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+  - name: VersionExtension
+    value: ''
+- ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+  - name: VersionExtension
+    value: '-alpha'
 
 # specific branch build with batching
 trigger:
@@ -43,21 +49,13 @@ steps:
     organization: 'mathieumack-github'
     projectKey: 'github-$(Build.DefinitionName)'
     projectName: '$(Build.DefinitionName)'
-    projectVersion: '$(Build.BuildNumber)'
-
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build PR'
-  inputs:
-    projects: '**/*.csproj'
-    arguments: '-c $(BuildConfiguration) -p:FileVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber)-alpha'
-  condition: eq(variables['Build.Reason'], 'PullRequest')
+    projectVersion: '$(Build.BuildNumber)$(VersionExtension)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
   inputs:
     projects: '**/*.csproj'
-    arguments: '-c $(BuildConfiguration) -p:FileVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber)'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    arguments: '-c $(BuildConfiguration) -p:FileVersion=$(Build.BuildNumber) /p:Version=$(Build.BuildNumber)$(VersionExtension)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
