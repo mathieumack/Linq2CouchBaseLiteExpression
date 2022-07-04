@@ -21,7 +21,7 @@ namespace Linq2CouchBaseLiteExpression.Tests.ToSqlQuery.SimpleQueries
         [TestMethod]
         public void Binary_Boolean_ValueConstants()
         {
-            CheckCount<EntityObject>((e) => e.IsHuman == true, 8);
+            CheckCount<EntityObject>((e) => e.IsHuman == true, 3);
         }
 
         [TestMethod]
