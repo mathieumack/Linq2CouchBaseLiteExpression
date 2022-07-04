@@ -17,7 +17,7 @@ namespace Linq2CouchBaseLiteExpression.Tests.ToSqlQuery
         /// <param name="expectedCount"></param>
         protected void CheckCount<T>(Expression<Func<T, bool>> filterExpression, int expectedCount) where T : class
         {
-            var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateFromExpression(filterExpression);
+            var sqlQuery = Linq2CouchbaseLiteSqlQueryExpression.GenerateSqlWhereExpression(filterExpression);
 
             // Check filters :
             using (var query = db.CreateQuery($"SELECT ID FROM _ {sqlQuery}"))

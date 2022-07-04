@@ -12,12 +12,11 @@ namespace Linq2CouchBaseLiteExpression
         /// </summary>
         /// <param name="expression"></param>
         /// <returns>SQL expression</returns>
-        public static string GenerateFromExpression<T>(Expression<Func<T, bool>> expression)
+        public static string GenerateSqlWhereExpression<T>(Expression<Func<T, bool>> expression)
         {
             var sqlQuery = GenerateFromExpression(expression.Body);
             return $"WHERE {sqlQuery}";
         }
-
 
         #region Global type expression :
 
