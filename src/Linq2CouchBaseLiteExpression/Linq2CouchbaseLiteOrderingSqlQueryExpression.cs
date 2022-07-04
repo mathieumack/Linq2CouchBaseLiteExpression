@@ -5,17 +5,18 @@ using System.Linq.Expressions;
 
 namespace Linq2CouchBaseLiteExpression
 {
-    public static class Linq2CouchbaseLiteOrderingExpression
+    public static class Linq2CouchbaseLiteOrderingSqlQueryExpression
     {
         /// <summary>
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="ascending">True = ascending, False = Descending</param>
         /// <returns></returns>
-        public static IOrdering GenerateOrderByFromExpression<TSource, TKey>(Expression<Func<TSource, TKey>> expression,
+        public static string GenerateOrderByFromExpression<TSource, TKey>(Expression<Func<TSource, TKey>> expression,
                                                                         bool ascending)
         {
-            return GenerateFromExpression(expression, ascending);
+            var sqlQuery = GenerateFromExpression(expression.Body, ascending);
+            return $"ORDER BY {sqlQuery}";
         }
 
         #region Global type expression :
@@ -25,15 +26,14 @@ namespace Linq2CouchBaseLiteExpression
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        private static IOrdering GenerateFromExpression(System.Linq.Expressions.Expression expression,
+        private static string GenerateFromExpression(System.Linq.Expressions.Expression expression,
                                                             bool ascending)
         {
             var memberValue = GetValueFromExpression(expression);
-            var sort = Ordering.Property((string)memberValue);
             if(ascending)
-                return sort.Ascending();
+                return $"{memberValue} ASC";
             else
-                return sort.Descending();
+                return $"{memberValue} DESC";
         }
 
         #endregion
