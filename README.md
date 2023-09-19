@@ -119,5 +119,10 @@ Linq2CouchbaseLiteExpression.GenerateFromExpression<EntityObject>((e) => string.
 ```
 
 # Contribute
-
 You want more ? Feel free to create an issue or contribute by adding new functionnalities by forking the project and create a pull request.
+
+And if you like this project, don't forget to star it !
+
+You can also support me with a coffee :
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/mathieumack)
